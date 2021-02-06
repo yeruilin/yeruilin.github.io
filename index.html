@@ -152,6 +152,87 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-分布式数据一致性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/">分布式数据一致性</a>
+    </h1>
+  
+
+        
+        <a href="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/" class="archive-article-date">
+  	<time datetime="2021-02-06T04:53:17.276Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本章的内容是基于分布式存储中间件，比如说redis等nosql。</p>
+<h2 id="分布式一致性算法"><a href="#分布式一致性算法" class="headerlink" title="分布式一致性算法"></a>分布式一致性算法</h2><h3 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h3><p>CAP指的是数据中间件的三种特性：一致性，可用性、分区容错性，一致性是一定要保证的，否则就没有意义。与之对应的有两种架构，CP架构或者AP架构，区别就在于客户端发出请求之后，是先返回在同步数据还是先同步数据再返回响应。</p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/1.png" alt="1"></p>
+<p>zookeeper和redis就分别是CP和AP架构：</p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/2.png" alt="2"></p>
+<h3 id="状态机复制State-machine-replication"><a href="#状态机复制State-machine-replication" class="headerlink" title="状态机复制State machine replication"></a>状态机复制State machine replication</h3><p>分布式一致性问题的一般解决方案就是状态机复制，也就是将一条日志同步到其他所有结点的日志中，保证集群的一致性。</p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/3.png" alt="3"></p>
+<h3 id="弱一致性、强一致性、多数派模型"><a href="#弱一致性、强一致性、多数派模型" class="headerlink" title="弱一致性、强一致性、多数派模型"></a>弱一致性、强一致性、多数派模型</h3><p>弱一致性就是一个结点不影响其他节点，比如说DNS解析的结点</p>
+<p>强一致性就是在同步数据的时候，返回线程会阻塞，必须同步完了之后才能通畅。这就意味着一旦一个结点出错，整个系统不可用。</p>
+<p>多数派模型就是一旦超过半数结点同步完成，就可以返回数据。同时继续同步数据，Paxos就是一个这样的模型。</p>
+<h3 id="Paxos模型"><a href="#Paxos模型" class="headerlink" title="Paxos模型"></a>Paxos模型</h3><p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/4.png" alt="4"></p>
+<p>Paxos当中的核心就是投票和日志顺序。</p>
+<p>投票就是每次写都保证写入大于一半的结点，每次读保证从大于一般的结点读。</p>
+<p>日志顺序就是连续两个修改到达不同结点的时间不同，可能顺序不同，这样导致的修改就不同。</p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/5.png" alt="5"></p>
+<h4 id="BasicPaxos"><a href="#BasicPaxos" class="headerlink" title="BasicPaxos"></a>BasicPaxos</h4><p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/6.png" alt="6"></p>
+<p>Paxos最基础的版本，提议员和记录员都是一般不实现的。下面是一个泳道图，每个事件都有全局唯一的ID，需要全局自增。之所以需要一个全局自增的提案编号，因为讨论需要满足一定的顺序，也就是5号议案必须在4号之后，<strong>如果5号审议完成，即使4号议案没有讨论，也不再讨论</strong>。这个涉及主要为了解决日志顺序的问题。</p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/7.png" alt="7"></p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/8.png" alt="8"></p>
+<h3 id="Raft-ZAB协议详解"><a href="#Raft-ZAB协议详解" class="headerlink" title="Raft,ZAB协议详解"></a>Raft,ZAB协议详解</h3><h3 id="Nacos源码解析"><a href="#Nacos源码解析" class="headerlink" title="Nacos源码解析"></a>Nacos源码解析</h3>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-我的第一篇博客文章" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -189,77 +270,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/02/05/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/05/hello-world/">Hello World</a>
-    </h1>
-  
-
-        
-        <a href="/2021/02/05/hello-world/" class="archive-article-date">
-  	<time datetime="2021-02-05T13:02:13.132Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/05/hello-world/">展开全文 >></a>
         </p>
       
 
