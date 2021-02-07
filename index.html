@@ -281,14 +281,14 @@
 <li><p>部分议员accepter出现问题：此时如果没有超过半数，提案依然可以完成。如果超过一般，提案不能执行下去。</p>
 </li>
 <li><p>提议者proposer出现问题：客户端需要再找一个可用结点作proposer，提出相同的提案，原先的提案作废。</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/blog\source_posts\分布式数据一致性\9.png" alt="9"></p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/blog\source\_posts\分布式数据一致性\9.png" alt="9"></p>
 </li>
 <li><p>并发问题：如果同时有两个时间非常接近的提案，第二个提案的第一阶段会覆盖第一个提案的第二阶段，以致于出错；如果客户事务被拒绝的时候重新提出，甚至会出现活锁的现象，导致任何提案都不能被执行。</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/blog\source_posts\分布式数据一致性\10.png" alt="10"></p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/blog\source\_posts\分布式数据一致性\10.png" alt="10"></p>
 </li>
 </ol>
 <h4 id="MultiPaxos"><a href="#MultiPaxos" class="headerlink" title="MultiPaxos"></a>MultiPaxos</h4><p>当出现两个非常接近的提案的时候，就不再需要多次准备，而是直接提交审议，因此可以分为选举和复制两个步骤。通过选举出有代表性的主节点，代表更多结点的意见，访问的时候优先访问这个结点。</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/blog\source_posts\分布式数据一致性\11.png" alt="11"></p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/blog\source\_posts\分布式数据一致性\11.png" alt="11"></p>
 <h3 id="Raft-ZAB协议详解"><a href="#Raft-ZAB协议详解" class="headerlink" title="Raft,ZAB协议详解"></a>Raft,ZAB协议详解</h3><h3 id="Nacos源码解析"><a href="#Nacos源码解析" class="headerlink" title="Nacos源码解析"></a>Nacos源码解析</h3>
       
 
