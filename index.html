@@ -152,46 +152,50 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-分布式数据一致性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-区块链1-密码学基础" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/">分布式数据一致性</a>
+      <a class="article-title" href="/2021/02/07/%E5%8C%BA%E5%9D%97%E9%93%BE1-%E5%AF%86%E7%A0%81%E5%AD%A6%E5%9F%BA%E7%A1%80/">区块链1-密码学基础</a>
     </h1>
   
 
         
-        <a href="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/" class="archive-article-date">
-  	<time datetime="2021-02-06T04:53:17.276Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-06</time>
+        <a href="/2021/02/07/%E5%8C%BA%E5%9D%97%E9%93%BE1-%E5%AF%86%E7%A0%81%E5%AD%A6%E5%9F%BA%E7%A1%80/" class="archive-article-date">
+  	<time datetime="2021-02-07T02:38:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-07</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>本章的内容是基于分布式存储中间件，比如说redis等nosql。</p>
-<h2 id="分布式一致性算法"><a href="#分布式一致性算法" class="headerlink" title="分布式一致性算法"></a>分布式一致性算法</h2><h3 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h3><p>CAP指的是数据中间件的三种特性：一致性，可用性、分区容错性，一致性是一定要保证的，否则就没有意义。与之对应的有两种架构，CP架构或者AP架构，区别就在于客户端发出请求之后，是先返回在同步数据还是先同步数据再返回响应。</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/1.png" alt="1"></p>
-<p>zookeeper和redis就分别是CP和AP架构：</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/2.png" alt="2"></p>
-<h3 id="状态机复制State-machine-replication"><a href="#状态机复制State-machine-replication" class="headerlink" title="状态机复制State machine replication"></a>状态机复制State machine replication</h3><p>分布式一致性问题的一般解决方案就是状态机复制，也就是将一条日志同步到其他所有结点的日志中，保证集群的一致性。</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/3.png" alt="3"></p>
-<h3 id="弱一致性、强一致性、多数派模型"><a href="#弱一致性、强一致性、多数派模型" class="headerlink" title="弱一致性、强一致性、多数派模型"></a>弱一致性、强一致性、多数派模型</h3><p>弱一致性就是一个结点不影响其他节点，比如说DNS解析的结点</p>
-<p>强一致性就是在同步数据的时候，返回线程会阻塞，必须同步完了之后才能通畅。这就意味着一旦一个结点出错，整个系统不可用。</p>
-<p>多数派模型就是一旦超过半数结点同步完成，就可以返回数据。同时继续同步数据，Paxos就是一个这样的模型。</p>
-<h3 id="Paxos模型"><a href="#Paxos模型" class="headerlink" title="Paxos模型"></a>Paxos模型</h3><p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/4.png" alt="4"></p>
-<p>Paxos当中的核心就是投票和日志顺序。</p>
-<p>投票就是每次写都保证写入大于一半的结点，每次读保证从大于一般的结点读。</p>
-<p>日志顺序就是连续两个修改到达不同结点的时间不同，可能顺序不同，这样导致的修改就不同。</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/5.png" alt="5"></p>
-<h4 id="BasicPaxos"><a href="#BasicPaxos" class="headerlink" title="BasicPaxos"></a>BasicPaxos</h4><p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/6.png" alt="6"></p>
-<p>Paxos最基础的版本，提议员和记录员都是一般不实现的。下面是一个泳道图，每个事件都有全局唯一的ID，需要全局自增。之所以需要一个全局自增的提案编号，因为讨论需要满足一定的顺序，也就是5号议案必须在4号之后，<strong>如果5号审议完成，即使4号议案没有讨论，也不再讨论</strong>。这个涉及主要为了解决日志顺序的问题。</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/7.png" alt="7"></p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/8.png" alt="8"></p>
-<h3 id="Raft-ZAB协议详解"><a href="#Raft-ZAB协议详解" class="headerlink" title="Raft,ZAB协议详解"></a>Raft,ZAB协议详解</h3><h3 id="Nacos源码解析"><a href="#Nacos源码解析" class="headerlink" title="Nacos源码解析"></a>Nacos源码解析</h3>
+        <p>加密货币（crypto-currency）的核心是哈希和签名。</p>
+<h3 id="hash"><a href="#hash" class="headerlink" title="hash"></a>hash</h3><p>加密货币使用的hash叫做cryptographic hash function，这种hash函数有以下性质：</p>
+<ol>
+<li><p>collision resistance：$x\not=y$可能出现$H(x)\not=H(y)$的情况，但是没有办法认为找到对应的$y$。这样既可以通过hash值判断是否发生了改动，因为collision resistance保证了篡改者没办法改的恰到好处。</p>
+<p>但是collision resistance的性质目前都没法证明，只能用经验实践的方法判断，比如说MD5就被检验出不满足这个性质。</p>
+</li>
+<li><p>hiding：没有办法通过$H(x)$推出$x$，这就意味着信息不会暴露。但是还是可以通过遍历的方法搜索。想要让这样的方法不可行，需要满足：</p>
+<ul>
+<li>状态空间$x$足够大</li>
+<li>目标空间$H(x)$对应的$x$比较平均，不会出现大量$x$对应少量$H(x)$的情况。</li>
+</ul>
+</li>
+<li><p>puzzle friendly：只看$H(x)$没有办法猜出$x$在哪个区间更有可能，因而只能遍历、挖矿，也只有这样才能提供proof of work。但是一旦挖矿成功，其他人就可以轻易验证，因为只需要算一个hash。</p>
+</li>
+</ol>
+<p>咋事实上，有了前两个性质就可以实现digital commitment，也就是保存加密的电子凭证。比如说预测股市，需要提前预测结果，装在一个加密信封（sealed envelop）当中，等到结果出来之后打开看。有了前两个性质，预测$x$就可以加密为$H(x)$，然后在结果出来之后公布当初的预测结果，这可以用当初的哈希值检验。但是股市数量很少的话很容易破解，不满足hiding的条件，所以必须要在尾部加上一个随机数nonce之后再取hash，即$H(x||nonce)$（<strong>其实我挺好奇这样hash不就对不上了吗</strong>）。</p>
+<p>比特币使用的hash函数是SHA-256。</p>
+<h3 id="对称加密和非对称加密"><a href="#对称加密和非对称加密" class="headerlink" title="对称加密和非对称加密"></a>对称加密和非对称加密</h3><p>对称加密就是双方用相同的密钥加密解密，这种方法的问题在于传递密钥很不方便。</p>
+<p>非对称密钥就是一方有公钥和私钥，另一方用同一个公钥加密，将信息传递过去，接收方用私钥解密。这个过程中私钥都是没有暴露和传递的。</p>
+<h3 id="签名"><a href="#签名" class="headerlink" title="签名"></a>签名</h3><p>比特币中的账户只需要本地新建一个公私钥队就行，用公钥加密，私钥解密。签名使用私钥，签名的验证是用公钥。</p>
+<p>比如说A给B转账10个比特币，并将转账信息在区块链上公布，其他人怎么知道是不是冒名顶替。这集需要公布转账信息的时候加上私钥的签名，然后其他人用A的公钥来验证。</p>
+<p>这也会有一个问题，如果两个人恰好产生相同的公私钥，在区块链上找到另一个人，就可以转走他的钱。不过256位的hash中几乎没有可能产生相同的公私钥，但是<strong>必须要一个好的随机源</strong>，每次签名的时候也必须要好的随机源，否则可能泄露私钥。</p>
+<p>比特币中的签名主要是对某个信息取hash，然后用私钥签名。</p>
+
       
 
       
@@ -203,7 +207,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/">展开全文 >></a>
+          <a class="article-more-a" href="/2021/02/07/%E5%8C%BA%E5%9D%97%E9%93%BE1-%E5%AF%86%E7%A0%81%E5%AD%A6%E5%9F%BA%E7%A1%80/">展开全文 >></a>
         </p>
       
 
@@ -233,31 +237,59 @@
 
 
   
-    <article id="post-我的第一篇博客文章" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-分布式数据一致性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/05/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0/">我的第一篇博客文章</a>
+      <a class="article-title" href="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/">分布式数据一致性</a>
     </h1>
   
 
         
-        <a href="/2021/02/05/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0/" class="archive-article-date">
-  	<time datetime="2021-02-05T13:05:14.805Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-05</time>
+        <a href="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/" class="archive-article-date">
+  	<time datetime="2021-02-06T04:53:17.276Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-06</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##内容</p>
-<p>我是也瑞林</p>
-<p>##参考文献</p>
-<p>我也是叶瑞麟</p>
-
+        <p>本章的内容是基于分布式存储中间件，比如说redis等Nosql。</p>
+<h2 id="分布式一致性算法"><a href="#分布式一致性算法" class="headerlink" title="分布式一致性算法"></a>分布式一致性算法</h2><h3 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h3><p>CAP指的是数据中间件的三种特性：一致性，可用性、分区容错性，一致性是一定要保证的，否则就没有意义。与之对应的有两种架构，CP架构或者AP架构，区别就在于客户端发出请求之后，是先返回在同步数据还是先同步数据再返回响应。</p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/1.png" alt="1"></p>
+<p>zookeeper和redis就分别是CP和AP架构：</p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/2.png" alt="2"></p>
+<h3 id="状态机复制State-machine-replication"><a href="#状态机复制State-machine-replication" class="headerlink" title="状态机复制State machine replication"></a>状态机复制State machine replication</h3><p>分布式一致性问题的一般解决方案就是状态机复制，也就是将一条日志同步到其他所有结点的日志中，保证集群的一致性。</p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/3.png" alt="3"></p>
+<h3 id="弱一致性、强一致性、多数派模型"><a href="#弱一致性、强一致性、多数派模型" class="headerlink" title="弱一致性、强一致性、多数派模型"></a>弱一致性、强一致性、多数派模型</h3><p>弱一致性就是一个结点不影响其他节点，比如说DNS解析的结点</p>
+<p>强一致性就是在同步数据的时候，返回线程会阻塞，必须同步完了之后才能通畅。这就意味着一旦一个结点出错，整个系统不可用。</p>
+<p>多数派模型就是一旦超过半数结点同步完成，就可以返回数据。同时继续同步数据，Paxos就是一个这样的模型。</p>
+<h3 id="Paxos模型"><a href="#Paxos模型" class="headerlink" title="Paxos模型"></a>Paxos模型</h3><p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/4.png" alt="4"></p>
+<p>Paxos当中的核心就是投票和日志顺序。</p>
+<p>投票就是每次写都保证写入大于一半的结点，每次读保证从大于一般的结点读。</p>
+<p>日志顺序就是连续两个修改到达不同结点的时间不同，可能顺序不同，这样导致的修改就不同。</p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/5.png" alt="5"></p>
+<h4 id="BasicPaxos"><a href="#BasicPaxos" class="headerlink" title="BasicPaxos"></a>BasicPaxos</h4><p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/6.png" alt="6"></p>
+<p>Paxos最基础的版本，提议员和记录员都是一般不实现的。下面是一个泳道图，每个事件都有全局唯一的ID，需要全局自增。之所以需要一个全局自增的提案编号，因为讨论需要满足一定的顺序，也就是5号议案必须在4号之后，<strong>如果5号审议完成，即使4号议案没有讨论，也不再讨论</strong>。这个涉及主要为了解决日志顺序的问题。</p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/7.png" alt="7"></p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/8.png" alt="8"></p>
+<p>在过程当中，可能出现的问题主要有</p>
+<ol>
+<li><p>部分议员accepter出现问题：此时如果没有超过半数，提案依然可以完成。如果超过一般，提案不能执行下去。</p>
+</li>
+<li><p>提议者proposer出现问题：客户端需要再找一个可用结点作proposer，提出相同的提案，原先的提案作废。</p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/blog\source_posts\分布式数据一致性\9.png" alt="9"></p>
+</li>
+<li><p>并发问题：如果同时有两个时间非常接近的提案，第二个提案的第一阶段会覆盖第一个提案的第二阶段，以致于出错；如果客户事务被拒绝的时候重新提出，甚至会出现活锁的现象，导致任何提案都不能被执行。</p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/blog\source_posts\分布式数据一致性\10.png" alt="10"></p>
+</li>
+</ol>
+<h4 id="MultiPaxos"><a href="#MultiPaxos" class="headerlink" title="MultiPaxos"></a>MultiPaxos</h4><p>当出现两个非常接近的提案的时候，就不再需要多次准备，而是直接提交审议，因此可以分为选举和复制两个步骤。通过选举出有代表性的主节点，代表更多结点的意见，访问的时候优先访问这个结点。</p>
+<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/blog\source_posts\分布式数据一致性\11.png" alt="11"></p>
+<h3 id="Raft-ZAB协议详解"><a href="#Raft-ZAB协议详解" class="headerlink" title="Raft,ZAB协议详解"></a>Raft,ZAB协议详解</h3><h3 id="Nacos源码解析"><a href="#Nacos源码解析" class="headerlink" title="Nacos源码解析"></a>Nacos源码解析</h3>
       
 
       
@@ -269,7 +301,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/05/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0/">展开全文 >></a>
+          <a class="article-more-a" href="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/">展开全文 >></a>
         </p>
       
 
