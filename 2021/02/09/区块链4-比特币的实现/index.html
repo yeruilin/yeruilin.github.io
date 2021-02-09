@@ -6,15 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Hexo</title>
+  <title>区块链4-比特币的实现 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="UTXO(unspent transaction output)与交易费比特币仅仅保存了交易信息，是transaction-based ledger(账簿)，并没有什么地方告诉你余额还有多少。UTFO就是一个保存交易余额的数据结构，每次交易之后都会改变这个结构，它用内存保存，可以用于快速检测是否double-spending。 每次交易的时候，从原则上看，所有输入金额应该等于输出金额，但是有的时候">
+<meta property="og:type" content="article">
+<meta property="og:title" content="区块链4-比特币的实现">
+<meta property="og:url" content="http://example.com/2021/02/09/%E5%8C%BA%E5%9D%97%E9%93%BE4-%E6%AF%94%E7%89%B9%E5%B8%81%E7%9A%84%E5%AE%9E%E7%8E%B0/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="UTXO(unspent transaction output)与交易费比特币仅仅保存了交易信息，是transaction-based ledger(账簿)，并没有什么地方告诉你余额还有多少。UTFO就是一个保存交易余额的数据结构，每次交易之后都会改变这个结构，它用内存保存，可以用于快速检测是否double-spending。 每次交易的时候，从原则上看，所有输入金额应该等于输出金额，但是有的时候">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/02/09/%E5%8C%BA%E5%9D%97%E9%93%BE4-%E6%AF%94%E7%89%B9%E5%B8%81%E7%9A%84%E5%AE%9E%E7%8E%B0/blog/source/_posts/区块链4-比特币的实现/1.png">
+<meta property="og:image" content="http://example.com/2021/02/09/%E5%8C%BA%E5%9D%97%E9%93%BE4-%E6%AF%94%E7%89%B9%E5%B8%81%E7%9A%84%E5%AE%9E%E7%8E%B0/blog/source/_posts/区块链4-比特币的实现/2.png">
+<meta property="og:image" content="http://example.com/2021/02/09/%E5%8C%BA%E5%9D%97%E9%93%BE4-%E6%AF%94%E7%89%B9%E5%B8%81%E7%9A%84%E5%AE%9E%E7%8E%B0/blog/source/_posts/区块链4-比特币的实现/3.png">
+<meta property="og:image" content="http://example.com/2021/02/09/%E5%8C%BA%E5%9D%97%E9%93%BE4-%E6%AF%94%E7%89%B9%E5%B8%81%E7%9A%84%E5%AE%9E%E7%8E%B0/blog/source/_posts/区块链4-比特币的实现/4.png">
+<meta property="og:image" content="http://example.com/2021/02/09/%E5%8C%BA%E5%9D%97%E9%93%BE4-%E6%AF%94%E7%89%B9%E5%B8%81%E7%9A%84%E5%AE%9E%E7%8E%B0/blog/source/_posts/区块链4-比特币的实现/5.png">
+<meta property="article:published_time" content="2021-02-09T03:24:16.000Z">
+<meta property="article:modified_time" content="2021-02-09T04:04:52.706Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/02/09/%E5%8C%BA%E5%9D%97%E9%93%BE4-%E6%AF%94%E7%89%B9%E5%B8%81%E7%9A%84%E5%AE%9E%E7%8E%B0/blog/source/_posts/区块链4-比特币的实现/1.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -150,16 +160,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-区块链4-比特币的实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-区块链4-比特币的实现" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/09/%E5%8C%BA%E5%9D%97%E9%93%BE4-%E6%AF%94%E7%89%B9%E5%B8%81%E7%9A%84%E5%AE%9E%E7%8E%B0/">区块链4-比特币的实现</a>
+    <h1 class="article-title" itemprop="name">
+      区块链4-比特币的实现
     </h1>
   
 
@@ -192,6 +200,27 @@
       
 
       
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
     </div>
     <div class="article-info article-info-index">
       
@@ -199,16 +228,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/09/%E5%8C%BA%E5%9D%97%E9%93%BE4-%E6%AF%94%E7%89%B9%E5%B8%81%E7%9A%84%E5%AE%9E%E7%8E%B0/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/02/09/%E5%8C%BA%E5%9D%97%E9%93%BE4-%E6%AF%94%E7%89%B9%E5%B8%81%E7%9A%84%E5%AE%9E%E7%8E%B0/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2021/02/08/%E5%8C%BA%E5%9D%97%E9%93%BE3-%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">区块链3-共识协议</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -228,352 +316,14 @@
 
 
 
-
   
-    <article id="post-区块链3-共识协议" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/08/%E5%8C%BA%E5%9D%97%E9%93%BE3-%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/">区块链3-共识协议</a>
-    </h1>
   
 
-        
-        <a href="/2021/02/08/%E5%8C%BA%E5%9D%97%E9%93%BE3-%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/" class="archive-article-date">
-  	<time datetime="2021-02-08T02:41:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="花两次攻击-double-spending-attack"><a href="#花两次攻击-double-spending-attack" class="headerlink" title="花两次攻击(double spending attack)"></a>花两次攻击(double spending attack)</h3><p>试想央行发行数字货币，对每张货币进行央行私钥签名，所有人都知道央行的公钥，这样每收到一张数字货币，可以用公私钥检验是否是假币，因而数字货币具有公信力。</p>
-<p>但是这里存在一个问题，数字货币本质上就是一个有央行签名的文件，可以复制很多份，给不同的人，而收款方没有办法检验是否唯一，那么货币量无限增加。这就是double spending attack。</p>
-<p>要解决这样的问题，可以在央行维护一张大表，表中记录每个编号的数字货币在哪个人的手中。每次交易发生的时候，收款方都向央行核实一下这张数字货币是否在付款方手中，然后让央行更改数字货币的所有权，这样一定可以保证不会出现double spending attack的情况。</p>
-<h3 id="比特币系统"><a href="#比特币系统" class="headerlink" title="比特币系统"></a>比特币系统</h3><p>比特币需要实现的包括转账和查询交易是否合法两个问题。</p>
-<p>首先考虑转账问题：假设A是具有铸币权的用户，发行了10个比特币，转账给B 5个，C 5个。发生这个转账过程，A需要知道B和C的账户公钥，然后转账的账单上写上A的私钥签名，A这10个比特币的来源，写上B和C的账户公钥和给每个账户的比特币数目。实际上，账单还需要写上A的公钥，因为只有这样才能告知B和C谁转账给它们。</p>
-<p>倘若是在转账账单中写上A的公钥和私钥签名，很容易发现这里有安全漏洞。如果另一个用户B’冒充A，伪造了一个A转账给B 5个比特币的账单，写上自己的公钥和私钥，验证肯定是对的，这样就把A的钱偷走了。不过还是有办法找到漏洞，因为说明来源的时候（也就是铸币的时候）的账单有A的公钥，可以比对。</p>
-<p><img src="/2021/02/08/%E5%8C%BA%E5%9D%97%E9%93%BE3-%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/blog\source\_posts\区块链3-共识协议\1.png" alt="1"></p>
-<p>其次就是交易是否合法：写上比特币的来源就能解决这个问题，这一点保证了数字货币不能复制，也不可能凭空具备不具有的钱。。比如说上面这个区块链，最后B向F转账5个比特币，并告知来源是A转账给B的，但是在区块链查找的时候就会发现B已经在之前把钱转走给C和D，所以交易无效。</p>
-<p>所以，每次交易的时候，<strong>需要检验输入脚本和币的来源的输出脚本能否匹配</strong>，这是比特币系统的核心。</p>
-<h3 id="比特币共识机制"><a href="#比特币共识机制" class="headerlink" title="比特币共识机制"></a>比特币共识机制</h3><p>交易的账单如何去维护其实是一个很重要的问题，往往需要分布式方式来维护。很容易出现不同节点保存的账单不同的情况，这个时候必须要有共识协议。</p>
-<ul>
-<li>FLP不可能结论：在一个异步的分布式系统里（也就是网络传输延迟无上限），即使只有一个成员出错，都不可能达成共识。</li>
-<li>CAP原理：分布式系统的三个特性，consistency（一致性），availability（可用性），partition tolerence（分区容错性）最多只能实现两个，不可能三个都实现。</li>
-</ul>
-<p>分布式共识最常见的协议是Paxos，能够满足一致性，也就是全局数据一致，但是可能出现永远打不成共识的情况（尽管可能性非常小）。</p>
-<p>比特币中的共识协议要解决的问题是有些节点可能是恶意的。</p>
-<p>如果我们可以认为大多数结点都是好的，少数结点时恶意的，这种情况可以使用投票的方法，比如说很多联盟链。如果超过半数的结点认可某个结果，就全链采用这种结果。虽然会受到网络延迟、结点懒惰等问题的影响，但是还是很方便。</p>
-<p>但是对于比特币是不行的，投票权没有办法界定，一台超级计算机可以产生大量的结点影响投票结果（sybil attack）。因此，比特币并不适用节点数目投票，而是用结点的计算力投票。只有率先找到了某个满足$H(block\quad header)&lt;=target$的结点才有产生下一个区块的权力(记账权)。写入这个新的区块的内容要由前面的所有结点检验是否有问题，检验的内容主要包括：</p>
-<ul>
-<li>新节点提供的nonce是否满足$H(block\quad header)&lt;=target$的不等式，即挖矿是否成功</li>
-<li>block header中的那几项是否都符合要求</li>
-<li>block body中的交易列表是否有问题，验证合法签名和BTC的来源</li>
-</ul>
-<p>那么争夺这个记账权有什么用？因为只要是合法的交易都要写入区块链，记账的内容都是一样的，所以有这个记账权必须要获得奖励，这个奖励就是发行一定数量的比特币，也就是coinbase-transaction。（新比特币只有这一种方式发行，造成了其稀缺性）</p>
-<p>协议规定，如果是前21万个区块，每次可以获得50个BTC，再21万个区块可以获得12.5个BTC，然后再减半下去。</p>
-<h3 id="最长合法链"><a href="#最长合法链" class="headerlink" title="最长合法链"></a>最长合法链</h3><p>比特币协议中强调，所有的新节点都必须加在最长的链上面，也就是最长合法链。如果没有这个规定，就会出现分叉攻击（forking attack）的问题。由于回溯交易只能沿着这条链往上，所以 分叉攻击可以回滚（rollback）过去的交易。比如说下图中：下面的的$A-&gt;A’$这个攻击区块如果向后延申，就能抹去A向B转账的交易，这是很危险的。</p>
-<p><img src="/2021/02/08/%E5%8C%BA%E5%9D%97%E9%93%BE3-%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/blog\source\_posts\区块链3-共识协议\2.png" alt></p>
-<p>但是有时候依然会出现两条链分叉的情况，比如说两个人几乎同时挖到矿，就会产生两个分支，都是最长链。这个时候大家都合法，其他人可能部分支持第一条链，部分支持第二条链，如果下一个最先挖到矿的人选择了第一条链，第一条链就成为最长链，第二条链就无效了，该分叉上的新挖出来的比特币将没有后继结点使用，也就意味着这些BTC作废。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/08/%E5%8C%BA%E5%9D%97%E9%93%BE3-%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-区块链2-比特币数据结构" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/07/%E5%8C%BA%E5%9D%97%E9%93%BE2-%E6%AF%94%E7%89%B9%E5%B8%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">区块链2-比特币数据结构</a>
-    </h1>
   
 
-        
-        <a href="/2021/02/07/%E5%8C%BA%E5%9D%97%E9%93%BE2-%E6%AF%94%E7%89%B9%E5%B8%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="archive-article-date">
-  	<time datetime="2021-02-07T04:17:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>区块链本质上就是链表，但是和链表的区别在于区块链用hash指针代替了普通指针。</p>
-<h3 id="链表与hash指针"><a href="#链表与hash指针" class="headerlink" title="链表与hash指针"></a>链表与hash指针</h3><p>hash指针不仅仅包括结构在内存中的位置，还包括该内容的hash值。</p>
-<p><img src="/2021/02/07/%E5%8C%BA%E5%9D%97%E9%93%BE2-%E6%AF%94%E7%89%B9%E5%B8%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/blog\source\_posts\区块链2-比特币数据结构\1.png" alt="1"></p>
-<p>上图是一个区块链的结构，每个结点都有上一个结点的hash指针，如果某一个结点篡改，将导致其后面的所有结点都必须改动，最后本地的hash指针可以发现异常，因此“牵一发而动全身”，具有抗篡改的能力。</p>
-<p>但是还有一个问题，由于区块链太长，所以往往不能保存所有结点，只能是前面若干个结点的信息，再前面需要在沿着链查询。这个时候如果有恶意结点，提供给别人虚假信息，很容易通过hash值发现内容有问题。</p>
-<h3 id="Merkle-tree"><a href="#Merkle-tree" class="headerlink" title="Merkle tree"></a>Merkle tree</h3><p>Merkle tree是一种特殊的二叉树，保存的是hash指针。</p>
-<p><img src="/2021/02/07/%E5%8C%BA%E5%9D%97%E9%93%BE2-%E6%AF%94%E7%89%B9%E5%B8%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/blog\source\_posts\区块链2-比特币数据结构\2.png" alt="2"></p>
-<p>最下面一层是数据结点，上面每一层的内容都是下一层的hash指针。最顶层的结点内容也可以取一个hash，保存在root结点中。只要检测root结点中的hash值，就能检测对任何部位的篡改。</p>
-<p>比特币当中的所有区块都是用链表链接，每个区块中的所有交易信息都是用Merkle tree的形式保存。每个区块又分为block header和block body，block header只保存root hash值，其他信息都在block body中。</p>
-<p>比特币中的结点分为两类，一种是全节点，包含header和body，一种是轻结点，只保存header，比如说手机中的比特币钱包。对于轻结点，没有完整的数据节点，因此如何能够知道交易是否发生呢（proof of membership）？这需要用到Merkle proof。</p>
-<p>Merkle proof实际上就是Merkle tree上从某个交易结点到root结点的路径。证明过程如下图所示，如果要沿着Merkle proof计算，其实并不需要全节点发送所有data block的信息，只需要发送红色的hash值，然后就可以根据待证明交易tx一步一步计算出顶层hash值，和root hash值进行比较。</p>
-<p><img src="/2021/02/07/%E5%8C%BA%E5%9D%97%E9%93%BE2-%E6%AF%94%E7%89%B9%E5%B8%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/blog\source\_posts\区块链2-比特币数据结构\3.png" alt="3"></p>
-<h3 id="Sorted-Merkle-tree"><a href="#Sorted-Merkle-tree" class="headerlink" title="Sorted Merkle tree"></a>Sorted Merkle tree</h3><p>如果所有叶节点都按照hash值进行了排序，就称为Sorted Merkle tree。比特币中并不要求所有的叶节点按照hash值进行排序。</p>
-<p>Sorted Merkle tree有一个好处，就是可以很容易证明某个交易不存在，也就是proof of non-membership。正常情况下这样的证明需要把所有的叶节点都传给轻结点，所以复杂度是$O(n)$。但是如果数据结点排好序，就可以先计算出需要查询的结点的hash值，找到在底层的位置，然后按照类似于proof of membership的方法进行查询，复杂度是$O(log(n))$。</p>
-<h3 id="有环的区块链"><a href="#有环的区块链" class="headerlink" title="有环的区块链"></a>有环的区块链</h3><p>有环的区块链不能使用hash指针，这是因为hash值的计算需要用到另一个区块的信息，也就包括另一块中的hash值，这样会导致循环依赖，所有信息都没办法进行确定。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/07/%E5%8C%BA%E5%9D%97%E9%93%BE2-%E6%AF%94%E7%89%B9%E5%B8%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-区块链1-密码学基础" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/07/%E5%8C%BA%E5%9D%97%E9%93%BE1-%E5%AF%86%E7%A0%81%E5%AD%A6%E5%9F%BA%E7%A1%80/">区块链1-密码学基础</a>
-    </h1>
   
 
-        
-        <a href="/2021/02/07/%E5%8C%BA%E5%9D%97%E9%93%BE1-%E5%AF%86%E7%A0%81%E5%AD%A6%E5%9F%BA%E7%A1%80/" class="archive-article-date">
-  	<time datetime="2021-02-07T02:38:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>加密货币（crypto-currency）的核心是哈希和签名。</p>
-<h3 id="hash"><a href="#hash" class="headerlink" title="hash"></a>hash</h3><p>加密货币使用的hash叫做cryptographic hash function，这种hash函数有以下性质：</p>
-<ul>
-<li><p>collision resistance：$x\not=y$可能出现$H(x)\not=H(y)$的情况，但是没有办法认为找到对应的$y$。这样既可以通过hash值判断是否发生了改动，因为collision resistance保证了篡改者没办法改的恰到好处。但是collision resistance的性质目前都没法证明，只能用经验实践的方法判断，比如说MD5就被检验出不满足这个性质。</p>
-</li>
-<li><p>hiding：没有办法通过$H(x)$推出$x$，这就意味着信息不会暴露。但是还是可以通过遍历的方法搜索。想要让这样的方法不可行，需要满足：</p>
-<ul>
-<li>状态空间$x$足够大</li>
-<li>目标空间$H(x)$对应的$x$比较平均，不会出现大量$x$对应少量$H(x)$的情况。</li>
-</ul>
-</li>
-<li>puzzle friendly：只看$H(x)$没有办法猜出$x$在哪个区间更有可能，因而只能遍历、挖矿，也只有这样才能提供proof of work。但是一旦挖矿成功，其他人就可以轻易验证，因为只需要算一个hash。</li>
-</ul>
-<p>事实上，有了前两个性质就可以实现digital commitment，也就是保存加密的电子凭证。比如说预测股市，需要提前预测结果，装在一个加密信封（sealed envelop）当中，等到结果出来之后打开看。有了前两个性质，预测$x$就可以加密为$H(x)$，然后在结果出来之后公布当初的预测结果，这可以用当初的哈希值检验。但是股市数量很少的话很容易破解，不满足hiding的条件，所以必须要在尾部加上一个随机数nonce之后再取hash，即$H(x||nonce)$（<strong>其实我挺好奇这样hash不就对不上了吗</strong>）。</p>
-<p>比特币使用的hash函数是SHA-256。</p>
-<h3 id="对称加密和非对称加密"><a href="#对称加密和非对称加密" class="headerlink" title="对称加密和非对称加密"></a>对称加密和非对称加密</h3><p>对称加密就是双方用相同的密钥加密解密，这种方法的问题在于传递密钥很不方便。</p>
-<p>非对称密钥就是一方有公钥和私钥，另一方用同一个公钥加密，将信息传递过去，接收方用私钥解密。这个过程中私钥都是没有暴露和传递的。</p>
-<h3 id="签名"><a href="#签名" class="headerlink" title="签名"></a>签名</h3><p>比特币中的账户只需要本地新建一个公私钥队就行，用公钥加密，私钥解密。签名使用私钥，签名的验证是用公钥。</p>
-<p>比如说A给B转账10个比特币，并将转账信息在区块链上公布，其他人怎么知道是不是冒名顶替。这集需要公布转账信息的时候加上私钥的签名，然后其他人用A的公钥来验证。</p>
-<p>这也会有一个问题，如果两个人恰好产生相同的公私钥，在区块链上找到另一个人，就可以转走他的钱。不过256位的hash中几乎没有可能产生相同的公私钥，但是<strong>必须要一个好的随机源</strong>，每次签名的时候也必须要好的随机源，否则可能泄露私钥。</p>
-<p>比特币中的签名主要是对某个信息取hash，然后用私钥签名。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/07/%E5%8C%BA%E5%9D%97%E9%93%BE1-%E5%AF%86%E7%A0%81%E5%AD%A6%E5%9F%BA%E7%A1%80/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-分布式数据一致性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/">分布式数据一致性</a>
-    </h1>
-  
-
-        
-        <a href="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/" class="archive-article-date">
-  	<time datetime="2021-02-06T04:53:17.276Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本章的内容是基于分布式存储中间件，比如说redis等Nosql。</p>
-<h2 id="分布式一致性算法"><a href="#分布式一致性算法" class="headerlink" title="分布式一致性算法"></a>分布式一致性算法</h2><h3 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h3><p>CAP指的是数据中间件的三种特性：一致性，可用性、分区容错性，一致性是一定要保证的，否则就没有意义。与之对应的有两种架构，CP架构或者AP架构，区别就在于客户端发出请求之后，是先返回在同步数据还是先同步数据再返回响应。</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/1.png" alt="1"></p>
-<p>zookeeper和redis就分别是CP和AP架构：</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/2.png" alt="2"></p>
-<h3 id="状态机复制State-machine-replication"><a href="#状态机复制State-machine-replication" class="headerlink" title="状态机复制State machine replication"></a>状态机复制State machine replication</h3><p>分布式一致性问题的一般解决方案就是状态机复制，也就是将一条日志同步到其他所有结点的日志中，保证集群的一致性。</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/3.png" alt="3"></p>
-<h3 id="弱一致性、强一致性、多数派模型"><a href="#弱一致性、强一致性、多数派模型" class="headerlink" title="弱一致性、强一致性、多数派模型"></a>弱一致性、强一致性、多数派模型</h3><p>弱一致性就是一个结点不影响其他节点，比如说DNS解析的结点</p>
-<p>强一致性就是在同步数据的时候，返回线程会阻塞，必须同步完了之后才能通畅。这就意味着一旦一个结点出错，整个系统不可用。</p>
-<p>多数派模型就是一旦超过半数结点同步完成，就可以返回数据。同时继续同步数据，Paxos就是一个这样的模型。</p>
-<h3 id="Paxos模型"><a href="#Paxos模型" class="headerlink" title="Paxos模型"></a>Paxos模型</h3><p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/4.png" alt="4"></p>
-<p>Paxos当中的核心就是投票和日志顺序。</p>
-<p>投票就是每次写都保证写入大于一半的结点，每次读保证从大于一般的结点读。</p>
-<p>日志顺序就是连续两个修改到达不同结点的时间不同，可能顺序不同，这样导致的修改就不同。</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/5.png" alt="5"></p>
-<h4 id="BasicPaxos"><a href="#BasicPaxos" class="headerlink" title="BasicPaxos"></a>BasicPaxos</h4><p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/6.png" alt="6"></p>
-<p>Paxos最基础的版本，提议员和记录员都是一般不实现的。下面是一个泳道图，每个事件都有全局唯一的ID，需要全局自增。之所以需要一个全局自增的提案编号，因为讨论需要满足一定的顺序，也就是5号议案必须在4号之后，<strong>如果5号审议完成，即使4号议案没有讨论，也不再讨论</strong>。这个涉及主要为了解决日志顺序的问题。</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/7.png" alt="7"></p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/8.png" alt="8"></p>
-<p>在过程当中，可能出现的问题主要有</p>
-<ol>
-<li><p>部分议员accepter出现问题：此时如果没有超过半数，提案依然可以完成。如果超过一般，提案不能执行下去。</p>
-</li>
-<li><p>提议者proposer出现问题：客户端需要再找一个可用结点作proposer，提出相同的提案，原先的提案作废。</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/blog\source\_posts\分布式数据一致性\9.png" alt="9"></p>
-</li>
-<li><p>并发问题：如果同时有两个时间非常接近的提案，第二个提案的第一阶段会覆盖第一个提案的第二阶段，以致于出错；如果客户事务被拒绝的时候重新提出，甚至会出现活锁的现象，导致任何提案都不能被执行。</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/blog\source\_posts\分布式数据一致性\10.png" alt="10"></p>
-</li>
-</ol>
-<h4 id="MultiPaxos"><a href="#MultiPaxos" class="headerlink" title="MultiPaxos"></a>MultiPaxos</h4><p>当出现两个非常接近的提案的时候，就不再需要多次准备，而是直接提交审议，因此可以分为选举和复制两个步骤。通过选举出有代表性的主节点，代表更多结点的意见，访问的时候优先访问这个结点。</p>
-<p><img src="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/blog\source\_posts\分布式数据一致性\11.png" alt="11"></p>
-<h3 id="Raft-ZAB协议详解"><a href="#Raft-ZAB协议详解" class="headerlink" title="Raft,ZAB协议详解"></a>Raft,ZAB协议详解</h3><h3 id="Nacos源码解析"><a href="#Nacos源码解析" class="headerlink" title="Nacos源码解析"></a>Nacos源码解析</h3>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
 
 
@@ -596,8 +346,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
