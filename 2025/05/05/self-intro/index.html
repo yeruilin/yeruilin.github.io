@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://example.com/2025/05/05/self-intro/img/CudaMatlab.png">
 <meta property="og:image" content="http://example.com/2025/05/05/self-intro/img/NLOSFormer.png">
 <meta property="article:published_time" content="2025-05-05T13:46:16.960Z">
-<meta property="article:modified_time" content="2026-03-25T03:17:47.416Z">
+<meta property="article:modified_time" content="2026-03-25T08:07:47.631Z">
 <meta property="article:author" content="YeRuilin">
 <meta property="article:tag" content="Non-line-of-sight imaging, computer vision">
 <meta name="twitter:card" content="summary">
@@ -158,7 +158,7 @@
         <h2 id="About-Me"><a href="#About-Me" class="headerlink" title="About Me"></a>About Me</h2><p>I am Ruilin Ye, currently a Ph.D. candidate (2022-2027, expected) majoring in physics at University of Science and Technology of China (USTC), under the supervision of Prof. <a target="_blank" rel="noopener" href="http://quantum.ustc.edu.cn/web/index.php/node/475">Feihu Xu</a>. Before that, I received my B.S. Degree at Peking University in 2022. At present, I am based at the USTC Shanghai Institute for Advanced Studies in Pudong New Area, Shanghai.</p>
 <p>My research interests previously focus on <strong>non-line-of-sight (NLOS) imaging</strong>. I have developed <a href="#gaussian-transient-splatting">Gaussian Transient Splatting</a>, a state-of-the-art algorithm for 3D reconstruction in active NLOS imaging; and proposed <a href="#nlosformer">NLOSFormer</a>, the SOTA architecture for passive NLOS imaging. Gaussian Transient Splatting is currently under review at <strong>Nature</strong>, while NLOSFormer has been accepted by <strong>ACM Transactions on Graphics</strong>. In addition, I have built a comb-calibrated FMCW LiDAR system, which currently achieves the highest resolution among NLOS imaging systems and also supports real-time localization and tracking. Two related works arising from this system have been published in top physics journals: <strong>Physical Review Letters</strong> and <strong>Laser &amp; Photonics Reviews</strong>.</p>
 <p>Besides, I have also conducted in-depth research in <strong>computer graphics</strong> and <strong>rendering engines</strong>. I built <a href="#3d-imaging-simulation-engine">a 3D imaging simulation engine</a> from scratch based on OpenGL and implemented a real-time graphics rendering framework. The engine also integrates a parallel computing engine called <a href="#cudamatlab">CudaMatlab</a>, which I developed from scratch. Inspired by Torch’s C++ template metaprogramming, it implements much of MATLAB’s computational functionality natively in CUDA. This work won the gold award in The 1st USTC “Yuqing Cup” Campus Software Design Competition.</p>
-<p>Recently, my interests have expanded to <strong>generative vision foundation models</strong>. We have built <a href="#unified-pretrained-model">a unified pretrained model for computational imaging</a> by fine-tuning a Flux Flow Matching backbone, achieving the first unified framework across various 2D and 3D reconstruction tasks, with state-of-the-art performance on each task. We have also released a comprehensive benchmark dataset, which we believe will be a valuable resource for the community. Looking forward, we plan to further extend our model to dynamic imaging tasks using video-based models, which will offer greater application value.</p>
+<p>Recently, my interests have expanded to <strong>generative vision foundation models</strong>. We have built <a href="#unified-pretrained-model">a unified pretrained model for 3D computational imaging</a> by fine-tuning the Trellis Flow Matching backbone, achieving the first unified framework across various 3D reconstruction tasks, with state-of-the-art performance on each task. We have also released a comprehensive benchmark dataset, which we believe will be a valuable resource for the community. Looking forward, we plan to further extend our model to dynamic imaging tasks using video-based models, which will offer greater application value.</p>
 <p>Outside of academia, I am also very interested in football, badminton, and traveling.</p>
 <h2 id="News"><a href="#News" class="headerlink" title="News"></a>News</h2><ul>
 <li>2026.02: A first-author paper is accepted to <a target="_blank" rel="noopener" href="https://github.com/yeruilin/NLOSFormer">ACM Transactions on Graphics (ToG)</a>.</li>
@@ -187,9 +187,9 @@
 <li><strong>Ye R</strong>, Li W. et al. Non-Line-of-Sight Imaging using Gaussian Transient Splatting. <strong>Nature</strong>, 2nd round review, (2026).</li>
 <li><strong>Ye R</strong>, Zhou Y. et al. Thermal Non-Line-of-Sight Imaging through Rough Surfaces. <strong>ACM Transactions on Graphics (ToG)</strong>, accepted, (2026). ( <strong>IF &#x3D; 10.9</strong>, SCI I)</li>
 <li>Xiao Z, Chen D, <strong>Ye R</strong>, et al. Non-line-of-sight human pose estimation. <strong>Optics and Lasers in Engineering</strong>, 201, 109658. (2026) ( <strong>IF &#x3D; 4.4</strong>, SCI II) [<a target="_blank" rel="noopener" href="https://www.sciencedirect.com/science/article/pii/S0143816626000631">pdf</a>]</li>
+<li><strong>Ye R</strong>, Huang X*, et al. High-Resolution Non-Line-of-Sight Tracking By Comb-Calibrated FMCW LiDAR[J]. <strong>Laser &amp; Photonics Reviews</strong>, 19,6 (2025), 2401250. ( <strong>IF &#x3D; 10.7</strong>, SCI I) [<a target="_blank" rel="noopener" href="https://onlinelibrary.wiley.com/doi/abs/10.1002/lpor.202401250">pdf</a>]</li>
 <li>Huang X*, <strong>Ye R</strong>, et al. Non-Line-of-Sight Imaging and Vibrometry Using a Comb-Calibrated Coherent Sensor. <strong>Physical Review Letters</strong>, 132, 23 (2024), 233802. ( <strong>IF &#x3D; 9.1</strong>, SCI I) [<a target="_blank" rel="noopener" href="https://link.aps.org/doi/10.1103/PhysRevLett.132.233802">pdf</a>]</li>
-<li><strong>Ye R</strong>, Huang X*, et al. High-Resolution Non-Line-of-Sight Tracking By Comb-Calibrated FMCW LiDAR[J]. <strong>Laser &amp; Photonics Reviews</strong>, 19,6 (2024), 2401250. ( <strong>IF &#x3D; 10.7</strong>, SCI I) [<a target="_blank" rel="noopener" href="https://onlinelibrary.wiley.com/doi/abs/10.1002/lpor.202401250">pdf</a>]</li>
-<li><strong>Ye R</strong>, Huang Z*, Li L, et al. GeoUNet: A novel AI model for high-resolution mapping of ecological footprint[J]. <strong>International Journal of Applied Earth Observation and Geoinformation</strong>, 2022, 112: 102803. ( <strong>IF &#x3D; 7.5</strong>, SCI I) [<a target="_blank" rel="noopener" href="https://www.sciencedirect.com/science/article/pii/S156984322200005X">pdf</a>]</li>
+<li><strong>Ye R</strong>, Huang Z*, et al. GeoUNet: A novel AI model for high-resolution mapping of ecological footprint[J]. <strong>International Journal of Applied Earth Observation and Geoinformation</strong>, 2022, 112: 102803. ( <strong>IF &#x3D; 7.5</strong>, SCI I) [<a target="_blank" rel="noopener" href="https://www.sciencedirect.com/science/article/pii/S156984322200005X">pdf</a>]</li>
 <li>Li G, <strong>Ye R</strong>, et al. Concentration of data encoding in parameterized quantum circuits[J]. Advances in Neural Information Processing Systems (<strong>NIPS oral</strong>), 2022, 35: 19456-19469. [<a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper_files/paper/2022/file/7b2d0730df1edd8c97df4bf83696025d-Paper-Conference.pdf">pdf</a>]</li>
 </ol>
 <p><a target="_blank" rel="noopener" href="https://scholar.google.com/citations?hl=zh-CN&user=wiERxsMAAAAJ">Full list of publications in Google Scholar</a>.</p>
@@ -231,7 +231,7 @@
     <a href="https://github.com/yeruilin/Unified_Imaging" class="project-link" target="_blank">
       <strong style="font-size: 1.2rem;">2. Unifying Computational Imaging via A Multi-Modal Foundation Model</strong>
     </a>
-    <p style="margin-top: 8px;">We have trained a unified pretrained model for computational imaging on 40 H200 GPUs. Unlike previous approaches that develop a specialized network for each task, we redesign the Flux Flow Matching model by incorporating feature alignment and fine-tuning the physical embedding layer, achieving, for the first time, a unified framework across various 2D and 3D imaging tasks with state-of-the-art performance on each. The aligned features and unified backbone enable zero-shot multi-modal fusion imaging capability. The paper is currently in preparation.</p>
+    <p style="margin-top: 8px;">We have trained a unified pretrained model for computational imaging on 40 H200 GPUs. Unlike previous approaches that develop a specialized network for each task, we redesign the Trellis Flow Matching model by incorporating feature alignment and fine-tuning the physical embedding layer, achieving, for the first time, a unified framework across various 3D imaging tasks with state-of-the-art performance on each. The aligned features and unified backbone enable zero-shot multi-modal fusion imaging capability. The paper is currently in preparation.</p>
     <p><em>Keywords: Multi-Modal, Foundation Model, Flow Matching, Alignment </em></p>
   </div>
   <div style="flex: 0 0 40%;">
@@ -265,6 +265,7 @@
     <img src="img/NLOSFormer.png" alt="NLOSFormer" style="width: 100%; border-radius: 8px;">
   </div>
 </div>
+
       
 
       
